@@ -9,9 +9,12 @@ const analyzeProfile = async (req, res) => {
 
     await profileModel.saveProfile(profile);
 
-    // After saving, redirect the client to the GET endpoint for the single profile
-    // so the client issues a GET request to retrieve the saved profile details.
-    return res.redirect(303, `/profiles/${username}`);
+    // Return the saved profile directly to the client
+    return res.status(200).json({
+      success: true,
+      message: "Profile analyzed and saved",
+      data: profile,
+    });
   } catch (error) {
     console.error(error);
 
