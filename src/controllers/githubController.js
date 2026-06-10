@@ -1,30 +1,26 @@
 const githubService = require("../services/githubService");
 const profileModel = require("../models/profileModel");
-
 const analyzeProfile = async (req, res) => {
   try {
     const { username } = req.params;
 
-    const profile = await githubService.fetchGithubProfile(username);
+    const profile =
+      await githubService.fetchGithubProfile(username);
 
     await profileModel.saveProfile(profile);
 
-    // Return the saved profile directly to the client
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
-      message: "Profile analyzed and saved",
+      message: "Request processed successfully",
       data: profile,
     });
   } catch (error) {
-    console.error(error);
-
     res.status(500).json({
       success: false,
       message: error.message,
     });
   }
 };
-
 const getAllProfiles = async (req, res) => {
   try {
     const profiles = await profileModel.getAllProfiles();
