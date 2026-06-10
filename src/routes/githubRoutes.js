@@ -11,6 +11,11 @@ router.post(
 );
 
 router.get(
+  "/analyze/:username",
+  githubController.analyzeProfile
+);
+
+router.get(
   "/profiles",
   githubController.getAllProfiles
 );
