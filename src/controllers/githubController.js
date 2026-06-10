@@ -5,16 +5,13 @@ const analyzeProfile = async (req, res) => {
   try {
     const { username } = req.params;
 
-    const profile =
-      await githubService.fetchGithubProfile(username);
+    const profile = await githubService.fetchGithubProfile(username);
 
     await profileModel.saveProfile(profile);
 
-    res.status(200).json({
-      success: true,
-      message: "Profile analyzed successfully",
-      data: profile,
-    });
+    // After saving, redirect the client to the GET endpoint for the single profile
+    // so the client issues a GET request to retrieve the saved profile details.
+    return res.redirect(303, `/profiles/${username}`);
   } catch (error) {
     console.error(error);
 
@@ -27,8 +24,7 @@ const analyzeProfile = async (req, res) => {
 
 const getAllProfiles = async (req, res) => {
   try {
-    const profiles =
-      await profileModel.getAllProfiles();
+    const profiles = await profileModel.getAllProfiles();
 
     res.status(200).json({
       success: true,
@@ -47,8 +43,7 @@ const getSingleProfile = async (req, res) => {
   try {
     const { username } = req.params;
 
-    const profile =
-      await profileModel.getProfileByUsername(username);
+    const profile = await profileModel.getProfileByUsername(username);
 
     if (!profile) {
       return res.status(404).json({
